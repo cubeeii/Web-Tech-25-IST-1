@@ -8,22 +8,136 @@
 </head>
 
 <body>
+  <!-- Шапка сайта с навигацией -->
   <header>
-    <nav>
+    <nav aria-label="Основная навигация">
       <ul>
         <li><a href="index.html">Каталог</a></li>
-        <li><a href="loan.html">Выдача книг</a></li>
+        <li><a href="book.html">Пример книги</a></li>
+        <li><a href="loan.html">Оформить выдачу</a></li>
       </ul>
     </nav>
   </header>
 
+  <!-- Основное содержимое страницы -->
   <main>
-    <h1>Каталог книг</h1>
-    <!-- Тут содержимое страницы -->
+    <h1>Каталог книг библиотеки BookNest</h1>
+
+    <!-- Блок фильтров и поиска -->
+    <section aria-labelledby="filters-heading">
+      <h2 id="filters-heading">Фильтры и поиск</h2>
+      <form action="#" method="get">
+        <div>
+          <label for="search-query">Поиск по названию или автору:</label>
+          <input type="search" id="search-query" name="q" placeholder="Например: Мастер и Маргарита" maxlength="100">
+        </div>
+
+        <div>
+          <label for="genre-select">Жанр:</label>
+          <select id="genre-select" name="genre">
+            <option value="">Все жанры</option>
+            <option value="fiction">Художественная литература</option>
+            <option value="scifi">Научная фантастика</option>
+            <option value="programming">Программирование</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="sort-select">Сортировка:</label>
+          <select id="sort-select" name="sort">
+            <option value="popular">По популярности</option>
+            <option value="new">Сначала новые</option>
+            <option value="title">По названию</option>
+          </select>
+        </div>
+
+        <div>
+          <input type="checkbox" id="only-available" name="available" value="true">
+          <label for="only-available">Только доступные для выдачи</label>
+        </div>
+
+        <button type="submit">Применить фильтры</button>
+      </form>
+    </section>
+
+    <!-- Список карточек книг (ровно 6 штук через article) -->
+    <section aria-labelledby="catalog-heading">
+      <h2 id="catalog-heading">Список книг</h2>
+
+      <article>
+        <figure>
+          <img src="covers/book1.jpg" alt="Обложка книги «Чистый код» Роберта Мартина" width="200" height="300">
+          <figcaption>«Чистый код», Роберт Мартин</figcaption>
+        </figure>
+        <p>Год издания: <time datetime="2008">2008</time></p>
+        <p>Жанр: Программирование</p>
+        <p>Статус: <mark>В наличии</mark></p>
+        <a href="book.html">Подробнее о книге</a>
+      </article>
+
+      <article>
+        <figure>
+          <img src="covers/book2.jpg" alt="Обложка книги «Грокаем алгоритмы» Адитьи Бхаргавы" width="200" height="300">
+          <figcaption>«Грокаем алгоритмы», Адитья Бхаргава</figcaption>
+        </figure>
+        <p>Год издания: <time datetime="2017">2017</time></p>
+        <p>Жанр: Программирование</p>
+        <p>Статус: <mark>В наличии</mark></p>
+        <a href="book.html">Подробнее о книге</a>
+      </article>
+
+      <article>
+        <figure>
+          <img src="covers/book3.jpg" alt="Обложка книги «1984» Джорджа Оруэлла" width="200" height="300">
+          <figcaption>«1984», Джордж Оруэлл</figcaption>
+        </figure>
+        <p>Год издания: <time datetime="1949">1949</time></p>
+        <p>Жанр: Фантастика</p>
+        <p>Статус: <span>Выдана</span></p>
+        <a href="book.html">Подробнее о книге</a>
+      </article>
+
+      <article>
+        <figure>
+          <img src="covers/book4.jpg" alt="Обложка книги «Мастер и Маргарита» Михаила Булгакова" width="200"
+            height="300">
+          <figcaption>«Мастер и Маргарита», Михаил Булгаков</figcaption>
+        </figure>
+        <p>Год издания: <time datetime="1967">1967</time></p>
+        <p>Жанр: Классика</p>
+        <p>Статус: <mark>В наличии</mark></p>
+        <a href="book.html">Подробнее о книге</a>
+      </article>
+
+      <article>
+        <figure>
+          <img src="covers/book5.jpg" alt="Обложка книги «Властелин Колец» Дж. Р. Р. Толкина" width="200" height="300">
+          <figcaption>«Властелин Колец», Дж. Р. Р. Толкин</figcaption>
+        </figure>
+        <p>Год издания: <time datetime="1954">1954</time></p>
+        <p>Жанр: Фэнтези</p>
+        <p>Статус: <mark>В наличии</mark></p>
+        <a href="book.html">Подробнее о книге</a>
+      </article>
+
+      <article>
+        <figure>
+          <img src="covers/book6.jpg" alt="Обложка книги «Алиса в Стране чудес» Льюиса Кэрролла" width="200"
+            height="300">
+          <figcaption>«Алиса в Стране чудес», Льюис Кэрролл</figcaption>
+        </figure>
+        <p>Год издания: <time datetime="1865">1865</time></p>
+        <p>Жанр: Сказка</p>
+        <p>Статус: <span>Выдана</span></p>
+        <a href="book.html">Подробнее о книге</a>
+      </article>
+
+    </section>
   </main>
 
+  <!-- Подвал сайта -->
   <footer>
-    <p>&copy; 2026 BookNest. Все права защищены.</p>
+    <p>&copy; 2026 BookNest. Учебный проект по веб-разработке.</p>
   </footer>
 </body>
 
