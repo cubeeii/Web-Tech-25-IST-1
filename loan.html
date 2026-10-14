@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookNest — Оформление выдачи книги</title>
+</head>
+
+<body>
+  <!-- Шапка сайта с навигацией -->
+  <header>
+    <nav aria-label="Основная навигация">
+      <ul>
+        <li><a href="index.html">Каталог</a></li>
+        <li><a href="book.html">Пример книги</a></li>
+        <li><a href="loan.html" aria-current="page">Оформить выдачу</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Основное содержимое страницы -->
+  <main>
+    <h1>Форма оформления выдачи книги</h1>
+    <p>Заполните форму ниже, чтобы забронировать или оформить выдачу книги в библиотеке.</p>
+
+    <form action="#" method="post">
+
+      <!-- Первая группа полей: Личные данные -->
+      <fieldset>
+        <legend>Личные данные читателя</legend>
+
+        <div>
+          <label for="reader-name">ФИО полностью:</label>
+          <input type="text" id="reader-name" name="fullname" required minlength="5" maxlength="100"
+            placeholder="Иванов Иван Иванович">
+        </div>
+
+        <div>
+          <label for="reader-email">Электронная почта:</label>
+          <input type="email" id="reader-email" name="email" required placeholder="example@domain.ru">
+        </div>
+
+        <div>
+          <label for="reader-card">Номер читательского билета:</label>
+          <input type="number" id="reader-card" name="card_number" required min="1" max="99999" placeholder="12345">
+        </div>
+      </fieldset>
+
+      <!-- Вторая группа полей: Параметры заказа -->
+      <fieldset>
+        <legend>Параметры выдачи книги</legend>
+
+        <div>
+          <label for="book-select">Выберите книгу:</label>
+          <select id="book-select" name="book_id" required>
+            <option value="">-- Выберите книгу из списка --</option>
+            <option value="1">«Чистый код» — Роберт Мартин</option>
+            <option value="2">«Грокаем алгоритмы» — Адитья Бхаргава</option>
+            <option value="4">«Мастер и Маргарита» — Михаил Булгаков</option>
+            <option value="5">«Властелин Колец» — Дж. Р. Р. Толкин</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="loan-days">Срок выдачи (в днях, от 7 до 30):</label>
+          <input type="number" id="loan-days" name="days" value="14" min="7" max="30" required>
+        </div>
+
+        <div>
+          <label for="pickup-date">Желаемая дата получения:</label>
+          <input type="date" id="pickup-date" name="pickup_date" required>
+        </div>
+
+        <div>
+          <label for="loan-comment">Комментарий к заказу (необязательно):</label>
+          <textarea id="loan-comment" name="comment" rows="4" maxlength="300"
+            placeholder="Например: заберу в вечернее время"></textarea>
+        </div>
+      </fieldset>
+
+      <!-- Кнопка отправки формы -->
+      <button type="submit">Отправить заявку на выдачу</button>
+    </form>
+  </main>
+
+  <!-- Подвал сайта -->
+  <footer>
+    <p>&copy; 2026 BookNest. Учебный проект по веб-разработке.</p>
+  </footer>
+</body>
+
+</html>
