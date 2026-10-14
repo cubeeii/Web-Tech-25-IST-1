@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookNest — Карточка книги: Чистый код</title>
+</head>
+
+<body>
+  <!-- Шапка сайта с навигацией и хлебными крошками -->
+  <header>
+    <nav aria-label="Основная навигация">
+      <ul>
+        <li><a href="index.html">Каталог</a></li>
+        <li><a href="loan.html">Оформить выдачу</a></li>
+      </ul>
+    </nav>
+
+    <!-- Хлебные крошки -->
+    <nav aria-label="Хлебные крошки">
+      <ol>
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="index.html#catalog">Каталог</a></li>
+        <li>
+        <li aria-current="page">Чистый код</li>
+        </li>
+      </ol>
+    </nav>
+  </header>
+
+  <!-- Основное содержимое страницы -->
+  <main>
+    <article>
+      <h1>Чистый код: создание, анализ и рефакторинг</h1>
+
+      <!-- Обложка книги -->
+      <figure>
+        <img src="covers/book1.jpg" alt="Обложка книги «Чистый код» Роберта Мартина" width="300" height="450">
+        <figcaption>Обложка издания 2008 года</figcaption>
+      </figure>
+
+      <!-- Характеристики книги через dl -->
+      <section aria-labelledby="specs-heading">
+        <h2 id="specs-heading">Характеристики книги</h2>
+        <dl>
+          <dt>Автор</dt>
+          <dd>Роберт Мартин (Uncle Bob)</dd>
+
+          <dt>Год издания</dt>
+          <dd><time datetime="2008">2008</time></dd>
+
+          <dt>Жанр</dt>
+          <dd>Программирование, Разработка ПО</dd>
+
+          <dt>ISBN</dt>
+          <dd>978-5-4461-0428-4</dd>
+
+          <dt>Количество страниц</dt>
+          <dd>464</dd>
+
+          <dt>Статус</dt>
+          <dd><mark>В наличии</mark> (Доступно 2 экземпляра)</dd>
+        </dl>
+      </section>
+
+      <!-- Описание книги -->
+      <section aria-labelledby="desc-heading">
+        <h2 id="desc-heading">Описание</h2>
+        <p>Даже плохой код может работать. Но если код не является «чистым», он может легко поставить компанию на
+          колени. Каждый год миллионы часов и ценные ресурсы тратятся из-за плохо написанного кода. Эта книга поможет
+          вам писать качественный, поддерживаемый и понятный код.</p>
+      </section>
+
+      <!-- Блок отзывов -->
+      <section aria-labelledby="reviews-heading">
+        <h2 id="reviews-heading">Отзывы читателей</h2>
+
+        <article>
+          <h3>Алексей С.</h3>
+          <p>Обязательная книга для каждого разработчика, который хочет гордиться своей работой. Написано живым языком.
+          </p>
+          <p><time datetime="2026-04-12">12 апреля 2026</time></p>
+        </article>
+
+        <article>
+          <h3>Марина К.</h3>
+          <p>Многие вещи кажутся очевидными задним числом, но автор умело структурирует базовые правила чистого
+            архитектурного кода.</p>
+          <p><time datetime="2026-05-01">1 мая 2026</time></p>
+        </article>
+      </section>
+
+      <!-- Форма нового отзыва -->
+      <section aria-labelledby="new-review-heading">
+        <h2 id="new-review-heading">Оставить свой отзыв</h2>
+        <form action="#" method="post">
+          <div>
+            <label for="reviewer-name">Ваше имя:</label>
+            <input type="text" id="reviewer-name" name="name" required maxlength="50">
+          </div>
+
+          <div>
+            <label for="review-text">Текст отзыва:</label>
+            <textarea id="review-text" name="review" rows="5" required minlength="10" maxlength="500"></textarea>
+          </div>
+
+          <button type="submit">Отправить отзыв</button>
+        </form>
+      </section>
+
+    </article>
+
+    <!-- Похожие книги (aside или section) -->
+    <aside aria-labelledby="similar-heading">
+      <h2 id="similar-heading">Похожие книги</h2>
+      <ul>
+        <li>
+          <a href="book.html">Грокаем алгоритмы</a> — Адитья Бхаргава
+        </li>
+        <li>
+          <a href="book.html">Совершенный код</a> — Стив Макконнелл
+        </li>
+      </ul>
+    </aside>
+  </main>
+
+  <!-- Подвал сайта -->
+  <footer>
+    <p>&copy; 2026 BookNest. Учебный проект по веб-разработке.</p>
+  </footer>
+</body>
+
+</html>
