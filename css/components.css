@@ -16,9 +16,7 @@ p {
 }
 
 /* --- Сетка каталога (Адаптив без медиа-запросов через auto-fit) --- */
-/* Требуется в ЛР: repeat(auto-fit, minmax(...)) */
-.catalog-grid,
-main>section:has(article) {
+.catalog-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: var(--space-lg);
