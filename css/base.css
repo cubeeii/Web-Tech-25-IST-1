@@ -1,0 +1,70 @@
+/* Правильный расчет размеров элементов */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Убираем отступы */
+body,
+h1,
+h2,
+h3,
+p,
+figure,
+dl,
+dt,
+dd,
+ul,
+ol,
+li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Базовые настройки страницы */
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Списки без маркеров по умолчанию (где нужно) */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Ссылки */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Главное требование доступности: видимый фокус для клавиатуры */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Учет prefers-reduced-motion (отключение анимаций) */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
