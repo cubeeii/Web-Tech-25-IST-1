@@ -1,5 +1,5 @@
 :root {
-  /* Цвета (Палитра) */
+  /* --- Светлая палитра (по умолчанию) --- */
   --color-bg: #f8f9fa;
   --color-surface: #ffffff;
   --color-text: #212529;
@@ -7,26 +7,44 @@
   --color-primary: #0d6efd;
   --color-primary-hover: #0b5ed7;
   --color-border: #dee2e6;
+  --color-focus: #ffc107;
 
-  /* Шкала отступов */
+  /* --- Шкала отступов --- */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
   --space-lg: 24px;
   --space-xl: 32px;
 
-  /* Радиусы скругления */
+  /* --- Радиусы скругления --- */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
 
-  /* Типографика */
-  --font-family: system-ui, -apple-system, sans-serif;
+  /* --- Типографика --- */
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-size-lg: 1.25rem;
   --font-size-h1: 2rem;
 
-  /* Тени */
+  /* --- Тени --- */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Тёмная тема (автоматическая) --- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #121212;
+    --color-surface: #1e1e1e;
+    --color-text: #e0e0e0;
+    --color-text-muted: #a0a0a0;
+    --color-primary: #3d8bfd;
+    --color-primary-hover: #6ea8fe;
+    --color-border: #333333;
+    --color-focus: #ffc107;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+  }
 }
