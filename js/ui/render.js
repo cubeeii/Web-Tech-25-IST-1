@@ -40,6 +40,7 @@ export function renderCatalog(books, wishlistIds = []) {
     const article = document.createElement('article');
     article.className = 'book-card';
     article.dataset.id = book.id;
+    article.style.cursor = 'pointer';
 
     const title = document.createElement('h3');
     title.textContent = book.title;
@@ -57,7 +58,6 @@ export function renderCatalog(books, wishlistIds = []) {
     // Ссылка на подробную страницу книги (book.html)
     const link = document.createElement('a');
     link.href = `book.html?id=${book.id}`;
-    link.textContent = 'Подробнее о книге';
     link.style.display = 'inline-block';
     link.style.marginRight = '10px';
 
