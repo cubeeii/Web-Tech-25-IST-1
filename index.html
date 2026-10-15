@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
+  
 </head>
 
 <body>
@@ -30,41 +31,45 @@
     <!-- Блок фильтров и поиска -->
     <section aria-labelledby="filters-heading">
       <h2 id="filters-heading">Фильтры и поиск</h2>
-      <form action="#" method="get">
+      <form id="filter-form">
         <div>
-          <label for="search-query">Поиск по названию или автору:</label>
-          <input type="search" id="search-query" name="q" placeholder="Например: Мастер и Маргарита" maxlength="100">
+          <label for="search-query">Поиск:</label>
+          <input type="search" id="search-query" name="q" placeholder="Название или автор...">
         </div>
-
+      
         <div>
           <label for="genre-select">Жанр:</label>
           <select id="genre-select" name="genre">
             <option value="">Все жанры</option>
-            <option value="fiction">Художественная литература</option>
-            <option value="scifi">Научная фантастика</option>
-            <option value="programming">Программирование</option>
+            <option value="Программирование">Программирование</option>
+            <option value="Фантастика">Фантастика</option>
+            <option value="Классика">Классика</option>
+            <option value="Фэнтези">Фэнтези</option>
+            <option value="Сказка">Сказка</option>
           </select>
         </div>
-
+      
         <div>
           <label for="sort-select">Сортировка:</label>
           <select id="sort-select" name="sort">
-            <option value="popular">По популярности</option>
-            <option value="new">Сначала новые</option>
-            <option value="title">По названию</option>
+            <option value="title">По названию (А-Я)</option>
+            <option value="year">Сначала новые</option>
+            <option value="rating">По рейтингу</option>
           </select>
         </div>
-
+      
         <div>
-          <input type="checkbox" id="only-available" name="available" value="true">
-          <label for="only-available">Только доступные для выдачи</label>
+          <input type="checkbox" id="only-available" name="available">
+          <label for="only-available">Только доступные</label>
         </div>
-
-        <button type="submit">Применить фильтры</button>
+      
+        <button type="button" id="reset-filters-btn">Сбросить</button>
       </form>
+      
+      <!-- Обязательно должен быть контейнер для книг и счётчик -->
+      <span id="books-count">Найдено книг: 0</span>
     </section>
 
-    <!-- Список карточек книг (ровно 6 штук через article) -->
     <section aria-labelledby="catalog-heading">
       <h2 id="catalog-heading">Список книг</h2>
 
@@ -145,7 +150,9 @@
   <footer>
     <p>&copy; 2026 BookNest. Учебный проект по веб-разработке.</p>
   </footer>
+
+  <script type="module" src="js/main.js"></script>
 </body>
 
-<script type="module" src="js/main.js"></script>
+
 </html>
