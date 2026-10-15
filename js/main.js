@@ -79,24 +79,31 @@ if (resetBtn) {
 const catalogContainer = document.querySelector('.catalog-grid');
 if (catalogContainer) {
   catalogContainer.addEventListener('click', (e) => {
-    // Ищем ближайшую кнопку желания от места клика
+    // 1. Проверяем, был ли клик по кнопке «Хочу прочитать»
     const btn = e.target.closest('.wishlist-btn');
-    if (!btn) return;
+    if (btn) {
+      e.stopPropagation(); // Останавливаем переход на страницу книги
 
-    // Находим карточку и получаем её ID
-    const card = btn.closest('.book-card');
-    if (!card) return;
+      const card = btn.closest('.book-card');
+      if (!card) return;
+      const bookId = Number(card.dataset.id);
 
-    const bookId = Number(card.dataset.id);
+      if (state.wishlist.includes(bookId)) {
+        state.wishlist = state.wishlist.filter(id => id !== bookId);
+      } else {
+        state.wishlist.push(bookId);
+      }
 
-    // Добавляем или удаляем книгу из списка желаемого
-    if (state.wishlist.includes(bookId)) {
-      state.wishlist = state.wishlist.filter(id => id !== bookId);
-    } else {
-      state.wishlist.push(bookId);
+      updateUI();
+      return;
     }
 
-    updateUI();
+    // 2. Если кликнули не на кнопку, а в любую другую часть карточки — открываем страницу книги
+    const card = e.target.closest('.book-card');
+    if (card) {
+      const bookId = card.dataset.id;
+      window.location.href = `book.html?id=${bookId}`;
+    }
   });
 }
 
