@@ -126,6 +126,15 @@ input[type="checkbox"] {
   accent-color: var(--color-primary);
 }
 
+.book-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
 /* --- Кнопки --- */
 button[type="submit"],
 .btn {
