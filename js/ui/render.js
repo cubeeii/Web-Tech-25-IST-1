@@ -17,7 +17,7 @@ export function renderCatalog(books, wishlistIds = []) {
     if (emptyState) {
       emptyState.style.display = 'block';
     } else {
-      // Если элемент заглушки не был создан в HTML, создадим его программно
+      
       const emptyMsg = document.createElement('p');
       emptyMsg.id = 'empty-state';
       emptyMsg.textContent = 'Книги по вашему запросу не найдены. Попробуйте изменить параметры фильтрации.';
@@ -52,7 +52,25 @@ export function renderCatalog(books, wishlistIds = []) {
 
     const status = document.createElement('p');
     status.textContent = book.available ? 'В наличии' : 'Выдана';
-    status.style.color = book.available ? 'var(--color-success, green)' : 'var(--color-text-muted, gray)';
+    status.style.color = book.available ? 'green' : 'gray';
+
+    // Ссылка на подробную страницу книги (book.html)
+    const link = document.createElement('a');
+    link.href = `book.html?id=${book.id}`;
+    link.textContent = 'Подробнее о книге';
+    link.style.display = 'inline-block';
+    link.style.marginRight = '10px';
+
+    // Кнопка «Хочу прочитать» с состоянием aria-pressed
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'wishlist-btn';
+    btn.textContent = isWishlisted ? 'В списке желаемого' : 'Хочу прочитать';
+    btn.setAttribute('aria-pressed', isWishlisted);
+
+    article.append(title, author, info, status, link, btn);
+    container.appendChild(article);
+  });
 
     // Кнопка «Хочу прочитать» с состоянием aria-pressed
     const btn = document.createElement('button');
@@ -73,3 +91,18 @@ export function renderWishlistCount(count) {
     badge.textContent = count;
   }
 }
+
+// Блок картинки / обложки с заглушкой
+const figure = document.createElement('figure');
+const img = document.createElement('img');
+
+// Если у книги есть путь к обложке — берем его, иначе ставим стандартную заглушку
+img.src = book.cover || 'covers/placeholder.jpg';
+img.alt = `Обложка книги «${book.title}»`;
+img.width = 150;
+img.height = 220;
+
+figure.appendChild(img);
+
+// Вставляем figure в начало карточки:
+article.append(figure, title, author, info, status, link, btn);
