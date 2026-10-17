@@ -34,7 +34,9 @@ export function renderCatalog(
     const article = document.createElement('article');
     article.className = 'book-card';
     article.dataset.id = book.id;
-    if (book.externalUrl) {
+    if (book.detailUrl) {
+      article.dataset.href = book.detailUrl;
+    } else if (book.externalUrl) {
       article.dataset.href = book.externalUrl;
     }
     article.style.cursor = 'pointer';
@@ -67,7 +69,7 @@ export function renderCatalog(
       link.rel = 'noopener noreferrer';
     }
     link.textContent = book.externalUrl
-      ? 'Подробнее на Open Library (новая вкладка)'
+      ? 'Подробнее на Open Library'
       : 'Подробнее о книге';
     link.style.display = 'inline-block';
     link.style.marginRight = '10px';
