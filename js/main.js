@@ -103,6 +103,9 @@ function mapApiBook(doc, index, selectedGenre) {
   const externalUrl = key.startsWith('/works/')
     ? new URL(key, 'https://openlibrary.org').href
     : 'https://openlibrary.org';
+  const detailUrl = key.startsWith('/works/')
+    ? `book.html?work=${encodeURIComponent(key)}`
+    : 'book.html';
 
   return {
     id,
@@ -115,7 +118,8 @@ function mapApiBook(doc, index, selectedGenre) {
     cover: doc.cover_i
       ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg`
       : 'covers/placeholder.jpg',
-    externalUrl
+    externalUrl,
+    detailUrl
   };
 }
 
@@ -145,7 +149,6 @@ async function runApiSearch(query) {
     const books = docs.map((doc, index) => mapApiBook(doc, index, selectedGenre));
     const sortedBooks = sortBooks(books, state.filters.sortBy);
     apiTotalPages = Math.ceil(numFound / booksPerPage);
-    apiLoading = false;
     renderCatalog(sortedBooks, state.wishlist, numFound);
     renderWishlistCount(state.wishlist.length);
     updatePagination();
@@ -155,9 +158,12 @@ async function runApiSearch(query) {
 
     renderCatalog([], state.wishlist, 0, 'Не удалось получить результаты поиска.');
     apiTotalPages = 0;
-    apiLoading = false;
-    updatePagination();
     setCatalogMessage(`Не удалось выполнить поиск: ${error.message}`);
+  } finally {
+    if (searchId === latestSearchId) {
+      apiLoading = false;
+      updatePagination();
+    }
   }
 }
 

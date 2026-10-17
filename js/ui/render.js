@@ -34,7 +34,9 @@ export function renderCatalog(
     const article = document.createElement('article');
     article.className = 'book-card';
     article.dataset.id = book.id;
-    if (book.externalUrl) {
+    if (book.detailUrl) {
+      article.dataset.href = book.detailUrl;
+    } else if (book.externalUrl) {
       article.dataset.href = book.externalUrl;
     }
     article.style.cursor = 'pointer';

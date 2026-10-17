@@ -35,18 +35,36 @@ export async function searchBooks(query, page = 1, limit = 20, signal = null, su
  * @param {AbortSignal} [signal] - Сигнал отмены запроса
  */
 export async function getBookDetails(bookKey, signal = null) {
+  const workPath = normalizeWorkPath(bookKey);
+  return await fetchApi(`${workPath}.json`, {}, signal);
+}
+
+/**
+ * Independently loads a work and its editions for the book details page.
+ * @param {string} bookKey - Open Library work key or ID
+ * @param {AbortSignal} [signal] - Request cancellation signal
+ */
+export async function getBookDetailsWithEditions(bookKey, signal = null) {
+  const workPath = normalizeWorkPath(bookKey);
+  const [work, editions] = await Promise.all([
+    fetchApi(`${workPath}.json`, {}, signal),
+    fetchApi(`${workPath}/editions.json`, { limit: 1 }, signal)
+  ]);
+
+  return { work, editionCount: editions.size ?? editions.numFound ?? 0 };
+}
+
+function normalizeWorkPath(bookKey) {
   if (!bookKey) {
     throw new Error('Не указан идентификатор книги');
   }
 
-  // Нормализуем путь к формату Open Library (например, /works/OL...json)
-  let endpoint = bookKey;
-  if (!endpoint.startsWith('/')) {
-    endpoint = `/works/${endpoint}`;
-  }
-  if (!endpoint.endsWith('.json')) {
-    endpoint = `${endpoint}.json`;
+  let workPath = bookKey.startsWith('/') ? bookKey : `/works/${bookKey}`;
+  workPath = workPath.replace(/\.json$/, '').replace(/\/+$/, '');
+
+  if (!/^\/works\/OL\d+W$/.test(workPath)) {
+    throw new Error('Некорректный идентификатор произведения Open Library');
   }
 
-  return await fetchApi(endpoint, {}, signal);
+  return workPath;
 }
