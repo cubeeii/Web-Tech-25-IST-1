@@ -162,6 +162,33 @@ button:disabled {
   cursor: not-allowed;
 }
 
+#catalog-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+#catalog-pagination[hidden] {
+  display: none;
+}
+
+#catalog-pagination button {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-family: var(--font-family);
+  font-weight: 600;
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+#catalog-pagination button:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+}
+
 /* --- Списки характеристик (dl для book.html) --- */
 dl {
   display: grid;

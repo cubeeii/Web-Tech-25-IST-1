@@ -1,1 +1,27 @@
-#This Readme will be updating with every pull request
+# BookNest
+
+Учебный проект каталога книг. Текущая версия лабораторной 5 перенесена на
+React, Vite и TypeScript; исходные страницы предыдущих лабораторных сохранены.
+
+## Запуск
+
+Требуется Node.js 18 или новее.
+
+```sh
+npm install
+npm run dev
+```
+
+Проверки перед отправкой изменений:
+
+```sh
+npm run lint
+npm run build
+```
+
+Главный экран React-приложения открывается по адресу `/`. В каталоге доступны
+поиск Open Library, фильтры, сортировка, пагинация и список желаемого. Список
+сохраняется в `localStorage`.
+
+Архитектура компонентов и владельцы состояния описаны в
+[`docs/lab5/components.md`](docs/lab5/components.md).

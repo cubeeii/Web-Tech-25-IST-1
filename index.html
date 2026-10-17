@@ -1,93 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BookNest — Каталог книг</title>
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
-  
-</head>
-
-<body>
-  <!-- Шапка сайта с навигацией -->
-  <header>
-    <nav aria-label="Основная навигация">
-      <ul>
-        <li><a href="index.html">Каталог</a></li>
-        <li><a href="book.html">Пример книги</a></li>
-        <li><a href="loan.html">Оформить выдачу</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <!-- Основное содержимое страницы -->
-  <main>
-    <h1>Каталог книг библиотеки BookNest</h1>
-
-    <!-- Блок фильтров и поиска -->
-    <section aria-labelledby="filters-heading">
-      <h2 id="filters-heading">Фильтры и поиск</h2>
-      <form id="filter-form">
-        <div>
-          <label for="search-query">Поиск:</label>
-          <input type="search" id="search-query" name="q" placeholder="Название или автор...">
-        </div>
-      
-        <div>
-          <label for="genre-select">Жанр:</label>
-          <select id="genre-select" name="genre">
-            <option value="">Все жанры</option>
-            <option value="Программирование">Программирование</option>
-            <option value="Фантастика">Фантастика</option>
-            <option value="Классика">Классика</option>
-            <option value="Фэнтези">Фэнтези</option>
-            <option value="Сказка">Сказка</option>
-          </select>
-        </div>
-      
-        <div>
-          <label for="sort-select">Сортировка:</label>
-          <select id="sort-select" name="sort">
-            <option value="title">По названию (А-Я)</option>
-            <option value="year">Сначала новые</option>
-            <option value="rating">По рейтингу</option>
-          </select>
-        </div>
-      
-        <div>
-          <input type="checkbox" id="only-available" name="available">
-          <label for="only-available">Только доступные (только каталог BookNest)</label>
-        </div>
-      
-        <button type="button" id="reset-filters-btn">Сбросить</button>
-      </form>
-      
-      <!-- Обязательно должен быть контейнер для книг и счётчик -->
-      <span id="books-count">Найдено книг: 0</span>
-      <p id="catalog-message" role="status" aria-live="polite"></p>
-    </section>
-
-    <section aria-labelledby="catalog-heading">
-      <h2 id="catalog-heading">Список книг</h2>
-
-      <div class="catalog-grid" aria-live="polite">
-      </div>
-
-    </section>
-  </main>
-
-  <!-- Подвал сайта -->
-  <footer>
-    <p>&copy; 2026 BookNest. Учебный проект по веб-разработке.</p>
-  </footer>
-
-  <script type="module" src="js/main.js"></script>
-
-</body>
-
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f8f9fa" />
+    <title>BookNest — Каталог книг</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

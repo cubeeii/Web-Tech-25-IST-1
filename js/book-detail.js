@@ -1,13 +1,11 @@
+import { getBookDetailsWithEditions } from './api/books.js';
 import { initialBooks } from './data/books.js';
 
-// 1. Ловим параметр id из URL (например, /book.html?id=5 -> id = "5")
 const params = new URLSearchParams(window.location.search);
+const workKey = params.get('work');
 const bookId = Number(params.get('id'));
+const localBook = initialBooks.find(book => book.id === bookId);
 
-// 2. Ищем книгу в нашем массиве данных
-const book = initialBooks.find(b => b.id === bookId);
-
-// 3. Находим элементы на странице book.html
 const titleEl = document.querySelector('#book-title');
 const breadcrumbEl = document.querySelector('#book-title-breadcrumb');
 const authorEl = document.querySelector('#book-author');
@@ -17,12 +15,60 @@ const ratingEl = document.querySelector('#book-rating');
 const statusEl = document.querySelector('#book-status');
 const coverEl = document.querySelector('#book-cover');
 const wishlistBtn = document.querySelector('#book-wishlist-btn');
+const loadStatusEl = document.querySelector('#book-load-status');
+const editionCountRow = document.querySelector('#edition-count-row');
+const editionCountEl = document.querySelector('#book-edition-count');
+const sourceRow = document.querySelector('#book-source-row');
+const sourceLink = document.querySelector('#book-source-link');
 
-// 4. Если книга нашлась — заполняем страницу, если нет — выводим ошибку
-if (book) {
-  document.title = `${book.title} — BookNest`;
-  if (titleEl) titleEl.textContent = book.title;
-  if (breadcrumbEl) breadcrumbEl.textContent = book.title;
+function setBookTitle(title) {
+  document.title = `${title} — BookNest`;
+  if (titleEl) titleEl.textContent = title;
+  if (breadcrumbEl) breadcrumbEl.textContent = title;
+}
+
+function setupWishlist(bookKey) {
+  if (!wishlistBtn) return;
+
+  let wishlist = [];
+  try {
+    const saved = localStorage.getItem('booknest_wishlist');
+    if (saved) {
+      const parsedWishlist = JSON.parse(saved);
+      if (!Array.isArray(parsedWishlist)) {
+        throw new TypeError('Сохраненный список желаемого должен быть массивом.');
+      }
+      wishlist = [...new Set(parsedWishlist.map(String))];
+    }
+  } catch (error) {
+    console.error('Ошибка чтения списка желаемого:', error);
+  }
+
+  const renderButton = () => {
+    const isWishlisted = wishlist.includes(String(bookKey));
+    wishlistBtn.textContent = isWishlisted ? 'В списке желаемого' : 'Хочу прочитать';
+    wishlistBtn.setAttribute('aria-pressed', isWishlisted);
+  };
+
+  renderButton();
+  wishlistBtn.addEventListener('click', () => {
+    if (wishlist.includes(String(bookKey))) {
+      wishlist = wishlist.filter(id => id !== String(bookKey));
+    } else {
+      wishlist.push(String(bookKey));
+    }
+
+    try {
+      localStorage.setItem('booknest_wishlist', JSON.stringify(wishlist));
+    } catch (error) {
+      console.error('Ошибка записи в localStorage:', error);
+    }
+    renderButton();
+  });
+}
+
+function renderLocalBook(book) {
+  setBookTitle(book.title);
   if (authorEl) authorEl.textContent = book.author;
   if (yearEl) yearEl.textContent = book.year;
   if (genreEl) genreEl.textContent = book.genre;
@@ -38,46 +84,57 @@ if (book) {
     coverEl.alt = `Обложка книги «${book.title}»`;
   }
 
-  // Бонус: синхронизация состояния «Хочу прочитать» с localStorage и на странице книги
-  let wishlist = [];
+  setupWishlist(book.id);
+}
+
+async function renderOpenLibraryBook(key) {
+  const controller = new AbortController();
+  window.addEventListener('pagehide', () => controller.abort(), { once: true });
+
+  if (loadStatusEl) loadStatusEl.textContent = 'Загружаем сведения о книге…';
+
   try {
-    const saved = localStorage.getItem('booknest_wishlist');
-    if (saved) {
-      const parsedWishlist = JSON.parse(saved);
-      if (!Array.isArray(parsedWishlist)) {
-        throw new TypeError('Сохраненный список желаемого должен быть массивом.');
-      }
-      wishlist = parsedWishlist.map(String);
+    const { work, editionCount } = await getBookDetailsWithEditions(key, controller.signal);
+    const title = work.title || 'Без названия';
+    setBookTitle(title);
+    if (authorEl) authorEl.textContent = 'Сведения об авторе доступны на Open Library';
+    if (yearEl) yearEl.textContent = work.first_publish_date || 'Не указан';
+    if (genreEl) {
+      genreEl.textContent = Array.isArray(work.subjects) && work.subjects.length
+        ? work.subjects.slice(0, 3).join(', ')
+        : 'Не указан';
     }
-  } catch (e) {
-    console.error('Ошибка чтения списка желаемого:', e);
+    if (ratingEl) ratingEl.textContent = 'Не указан';
+    if (statusEl) statusEl.textContent = 'Нет данных в каталоге BookNest';
+    if (coverEl) {
+      const coverId = Array.isArray(work.covers)
+        ? work.covers.find(id => Number.isInteger(id) && id > 0)
+        : null;
+      coverEl.src = coverId
+        ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`
+        : 'covers/placeholder.jpg';
+      coverEl.alt = `Обложка книги «${title}»`;
+    }
+    if (editionCountRow) editionCountRow.hidden = false;
+    if (editionCountEl) editionCountEl.textContent = editionCount;
+    if (sourceRow) sourceRow.hidden = false;
+    if (sourceLink) sourceLink.href = new URL(key, 'https://openlibrary.org').href;
+    setupWishlist(key);
+  } catch (error) {
+    if (error.name === 'AbortError') return;
+    if (loadStatusEl) loadStatusEl.textContent = `Не удалось загрузить книгу: ${error.message}`;
+  } finally {
+    if (!controller.signal.aborted && loadStatusEl?.textContent === 'Загружаем сведения о книге…') {
+      loadStatusEl.textContent = '';
+    }
   }
+}
 
-  let isWishlisted = wishlist.map(String).includes(String(book.id));
-  if (wishlistBtn) {
-    wishlistBtn.textContent = isWishlisted ? 'В списке желаемого' : 'Хочу прочитать';
-    wishlistBtn.setAttribute('aria-pressed', isWishlisted);
-
-    wishlistBtn.addEventListener('click', () => {
-      isWishlisted = !isWishlisted;
-      if (isWishlisted) {
-        if (!wishlist.map(String).includes(String(book.id))) wishlist.push(String(book.id));
-      } else {
-        wishlist = wishlist.filter(id => String(id) !== String(book.id));
-      }
-
-      try {
-        localStorage.setItem('booknest_wishlist', JSON.stringify(wishlist));
-      } catch (e) {
-        console.error('Ошибка записи в localStorage:', e);
-      }
-      wishlistBtn.textContent = isWishlisted ? 'В списке желаемого' : 'Хочу прочитать';
-      wishlistBtn.setAttribute('aria-pressed', isWishlisted);
-    });
-  }
-
+if (workKey) {
+  void renderOpenLibraryBook(workKey);
+} else if (localBook) {
+  renderLocalBook(localBook);
 } else {
-  // Обработка ситуации, если книга с таким ID не найдена
   const mainContent = document.querySelector('main');
   if (mainContent) {
     mainContent.innerHTML = '<h1>Книга не найдена</h1><p><a href="index.html">Вернуться в каталог</a></p>';

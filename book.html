@@ -44,6 +44,9 @@
         <p><strong>Жанр:</strong> <span id="book-genre">-</span></p>
         <p><strong>Рейтинг:</strong> ⭐ <span id="book-rating">-</span></p>
         <p><strong>Статус:</strong> <span id="book-status">-</span></p>
+        <p id="edition-count-row" hidden><strong>Количество изданий:</strong> <span id="book-edition-count">-</span></p>
+        <p id="book-load-status" role="status" aria-live="polite"></p>
+        <p id="book-source-row" hidden><a id="book-source-link" target="_blank" rel="noopener noreferrer">Открыть книгу на Open Library</a></p>
     
         <!-- Кнопка добавления в избранное прямо со страницы книги (опционально) -->
         <button type="button" id="book-wishlist-btn" class="wishlist-btn">Хочу прочитать</button>
@@ -55,6 +58,6 @@
   <footer>
     <p>&copy; 2026 BookNest. Учебный проект по веб-разработке.</p>
   </footer>
+  <script type="module" src="js/book-detail.js"></script>
 </body>
-<script type="module" src="js/book-detail.js"></script>
 </html>
