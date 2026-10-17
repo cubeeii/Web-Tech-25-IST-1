@@ -7,20 +7,25 @@ import { fetchApi } from './client.js';
  * @param {number} [limit=20] - Количество записей на странице
  * @param {AbortSignal} [signal] - Сигнал отмены запроса (AbortController)
  */
-export async function searchBooks(query, page = 1, limit = 20, signal = null) {
+export async function searchBooks(query, page = 1, limit = 20, signal = null, subject = '') {
   if (!query || query.trim() === '') {
     return { docs: [], numFound: 0 };
   }
 
+  const searchQuery = subject
+    ? `${query.trim()} subject:"${subject}"`
+    : query.trim();
+
   const data = await fetchApi('/search.json', {
-    q: query.trim(),
+    q: searchQuery,
     page,
-    limit
+    limit,
+    fields: 'key,title,author_name,first_publish_year,subject,cover_i,ratings_average'
   }, signal);
 
   return {
     docs: data.docs || [],
-    numFound: data.num_found || 0
+    numFound: data.numFound ?? data.num_found ?? 0
   };
 }
 

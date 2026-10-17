@@ -42,12 +42,18 @@ if (book) {
   let wishlist = [];
   try {
     const saved = localStorage.getItem('booknest_wishlist');
-    if (saved) wishlist = JSON.parse(saved);
+    if (saved) {
+      const parsedWishlist = JSON.parse(saved);
+      if (!Array.isArray(parsedWishlist)) {
+        throw new TypeError('Сохраненный список желаемого должен быть массивом.');
+      }
+      wishlist = parsedWishlist.map(String);
+    }
   } catch (e) {
-    console.error(e);
+    console.error('Ошибка чтения списка желаемого:', e);
   }
 
-  let isWishlisted = wishlist.includes(book.id);
+  let isWishlisted = wishlist.map(String).includes(String(book.id));
   if (wishlistBtn) {
     wishlistBtn.textContent = isWishlisted ? 'В списке желаемого' : 'Хочу прочитать';
     wishlistBtn.setAttribute('aria-pressed', isWishlisted);
@@ -55,12 +61,16 @@ if (book) {
     wishlistBtn.addEventListener('click', () => {
       isWishlisted = !isWishlisted;
       if (isWishlisted) {
-        if (!wishlist.includes(book.id)) wishlist.push(book.id);
+        if (!wishlist.map(String).includes(String(book.id))) wishlist.push(String(book.id));
       } else {
-        wishlist = wishlist.filter(id => id !== book.id);
+        wishlist = wishlist.filter(id => String(id) !== String(book.id));
       }
 
-      localStorage.setItem('booknest_wishlist', JSON.stringify(wishlist));
+      try {
+        localStorage.setItem('booknest_wishlist', JSON.stringify(wishlist));
+      } catch (e) {
+        console.error('Ошибка записи в localStorage:', e);
+      }
       wishlistBtn.textContent = isWishlisted ? 'В списке желаемого' : 'Хочу прочитать';
       wishlistBtn.setAttribute('aria-pressed', isWishlisted);
     });
