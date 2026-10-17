@@ -10,6 +10,7 @@ const apiSubjects = {
   'Фэнтези': 'fantasy',
   'Сказка': 'fairy tales'
 };
+const booksPerPage = 20;
 
 // 1. Инициализация глобального состояния приложения
 let state = {
@@ -26,6 +27,9 @@ let state = {
 let searchController = null;
 let searchTimer = null;
 let latestSearchId = 0;
+let apiPage = 1;
+let apiTotalPages = 0;
+let apiLoading = false;
 
 // Безопасное чтение списка желаемого из localStorage через try/catch
 try {
@@ -64,6 +68,21 @@ function setCatalogMessage(message) {
   if (messageContainer) {
     messageContainer.textContent = message;
   }
+}
+
+function updatePagination() {
+  const pagination = document.querySelector('#catalog-pagination');
+  const previousButton = document.querySelector('#previous-page-btn');
+  const nextButton = document.querySelector('#next-page-btn');
+  const pageIndicator = document.querySelector('#page-indicator');
+  const isApiSearch = Boolean(state.filters.search.trim());
+
+  if (!pagination || !previousButton || !nextButton || !pageIndicator) return;
+
+  pagination.hidden = !isApiSearch;
+  previousButton.disabled = !isApiSearch || apiPage <= 1 || apiLoading;
+  nextButton.disabled = !isApiSearch || apiPage >= apiTotalPages || apiLoading;
+  pageIndicator.textContent = apiTotalPages > 0 ? `Страница ${apiPage} из ${apiTotalPages}` : '';
 }
 
 function saveWishlist() {
@@ -107,14 +126,16 @@ async function runApiSearch(query) {
   const signal = searchController.signal;
   const selectedGenre = state.filters.genre;
 
+  apiLoading = true;
+  updatePagination();
   setCatalogMessage('Ищем книги в Open Library…');
   renderCatalog([], state.wishlist, null, 'Выполняется поиск…');
 
   try {
     const { docs, numFound } = await searchBooks(
       query,
-      1,
-      20,
+      apiPage,
+      booksPerPage,
       signal,
       apiSubjects[selectedGenre] || ''
     );
@@ -123,13 +144,19 @@ async function runApiSearch(query) {
 
     const books = docs.map((doc, index) => mapApiBook(doc, index, selectedGenre));
     const sortedBooks = sortBooks(books, state.filters.sortBy);
+    apiTotalPages = Math.ceil(numFound / booksPerPage);
+    apiLoading = false;
     renderCatalog(sortedBooks, state.wishlist, numFound);
     renderWishlistCount(state.wishlist.length);
+    updatePagination();
     setCatalogMessage('Результаты из Open Library. Наличие в BookNest не проверяется; фильтр доступности отключён.');
   } catch (error) {
     if (error.name === 'AbortError' || searchId !== latestSearchId) return;
 
     renderCatalog([], state.wishlist, 0, 'Не удалось получить результаты поиска.');
+    apiTotalPages = 0;
+    apiLoading = false;
+    updatePagination();
     setCatalogMessage(`Не удалось выполнить поиск: ${error.message}`);
   }
 }
@@ -148,6 +175,8 @@ function updateCatalogForCurrentFilters() {
       availableFilter.title = 'Open Library не предоставляет сведения о наличии книг в BookNest.';
     }
     state.filters.onlyAvailable = false;
+    apiLoading = true;
+    updatePagination();
     renderCatalog([], state.wishlist, null, 'Выполняется поиск…');
     setCatalogMessage('');
     searchTimer = setTimeout(() => runApiSearch(query), 300);
@@ -159,6 +188,10 @@ function updateCatalogForCurrentFilters() {
     availableFilter.removeAttribute('title');
   }
 
+  apiPage = 1;
+  apiTotalPages = 0;
+  apiLoading = false;
+  updatePagination();
   setCatalogMessage('');
   updateUI();
 }
@@ -167,11 +200,17 @@ function updateCatalogForCurrentFilters() {
 const filterForm = document.querySelector('#filter-form');
 if (filterForm) {
   const updateFiltersFromForm = () => {
+    const previousQuery = state.filters.search.trim();
+    const previousGenre = state.filters.genre;
     state.filters.search = filterForm.querySelector('#search-query')?.value || '';
     state.filters.genre = filterForm.querySelector('#genre-select')?.value || '';
     state.filters.onlyAvailable = filterForm.querySelector('#only-available')?.checked || false;
     state.filters.sortBy = filterForm.querySelector('#sort-select')?.value || 'title';
 
+    if (previousQuery !== state.filters.search.trim() || previousGenre !== state.filters.genre) {
+      apiPage = 1;
+      apiTotalPages = 0;
+    }
     updateCatalogForCurrentFilters();
   };
 
@@ -194,7 +233,29 @@ if (resetBtn) {
       onlyAvailable: false,
       sortBy: 'title'
     };
+    apiPage = 1;
+    apiTotalPages = 0;
     updateCatalogForCurrentFilters();
+  });
+}
+
+const previousPageButton = document.querySelector('#previous-page-btn');
+if (previousPageButton) {
+  previousPageButton.addEventListener('click', () => {
+    if (apiPage <= 1 || !state.filters.search.trim()) return;
+    apiPage--;
+    clearTimeout(searchTimer);
+    runApiSearch(state.filters.search.trim());
+  });
+}
+
+const nextPageButton = document.querySelector('#next-page-btn');
+if (nextPageButton) {
+  nextPageButton.addEventListener('click', () => {
+    if (apiPage >= apiTotalPages || !state.filters.search.trim()) return;
+    apiPage++;
+    clearTimeout(searchTimer);
+    runApiSearch(state.filters.search.trim());
   });
 }
 

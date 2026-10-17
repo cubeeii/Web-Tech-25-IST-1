@@ -67,7 +67,7 @@ export function renderCatalog(
       link.rel = 'noopener noreferrer';
     }
     link.textContent = book.externalUrl
-      ? 'Подробнее на Open Library (новая вкладка)'
+      ? 'Подробнее на Open Library'
       : 'Подробнее о книге';
     link.style.display = 'inline-block';
     link.style.marginRight = '10px';
