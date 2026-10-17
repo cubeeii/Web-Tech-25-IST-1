@@ -2,38 +2,23 @@
 export function renderCatalog(books, wishlistIds = []) {
   const container = document.querySelector('.catalog-grid');
   const countContainer = document.querySelector('#books-count');
-  const emptyState = document.querySelector('#empty-state');
 
   if (!container) return;
 
-  // Обновляем счётчик найденных записей
   if (countContainer) {
     countContainer.textContent = `Найдено книг: ${books.length}`;
   }
 
-  // Пустое состояние (если фильтры ничего не нашли)
+  container.innerHTML = '';
+
   if (books.length === 0) {
-    container.innerHTML = '';
-    if (emptyState) {
-      emptyState.style.display = 'block';
-    } else {
-      
-      const emptyMsg = document.createElement('p');
-      emptyMsg.id = 'empty-state';
-      emptyMsg.textContent = 'Книги по вашему запросу не найдены. Попробуйте изменить параметры фильтрации.';
-      container.appendChild(emptyMsg);
-    }
+    const emptyMessage = document.createElement('p');
+    emptyMessage.className = 'empty-state';
+    emptyMessage.textContent = 'Книги по вашему запросу не найдены. Попробуйте изменить параметры фильтрации.';
+    container.appendChild(emptyMessage);
     return;
   }
 
-  if (emptyState) {
-    emptyState.style.display = 'none';
-  }
-
-  // Очищаем контейнер перед новой отрисовкой
-  container.innerHTML = '';
-
-  // Рендерим каждую карточку через безопасные DOM-ноды
   books.forEach(book => {
     const isWishlisted = wishlistIds.includes(book.id);
 
@@ -58,6 +43,7 @@ export function renderCatalog(books, wishlistIds = []) {
     // Ссылка на подробную страницу книги (book.html)
     const link = document.createElement('a');
     link.href = `book.html?id=${book.id}`;
+    link.textContent = 'Подробнее о книге';
     link.style.display = 'inline-block';
     link.style.marginRight = '10px';
 
@@ -83,16 +69,6 @@ export function renderCatalog(books, wishlistIds = []) {
     article.append(figure, title, author, info, status, link, btn);
     container.appendChild(article);
   });
-
-  // then again here:
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'wishlist-btn';
-  btn.textContent = isWishlisted ? 'В списке желаемого' : 'Хочу прочитать';
-  btn.setAttribute('aria-pressed', isWishlisted);
-
-  article.append(title, author, info, status, btn);
-  container.appendChild(article);
 }
 
 // Отрисовка счётчика для «Моего списка» в шапке
